@@ -1,4 +1,5 @@
 from conexion import *
+from auxiliar import *
 import os
 
 def imprimir(ruta_imagen):
@@ -35,13 +36,14 @@ def imprimir_optimizado(ruta_imagen):
         while posY != 120:
 
 #-----------------------------------------------------------------------------
-#                      Fase de analisis:
+#                      ANALYSIS PHASE:
             
             analisis = analizar_linea(imagen, posY)
             if len(analisis) == 0:
                 #Skip line if empty
                 cerrar_rele_2()
                 posY = posY +1
+                print("Line {} done, estimated remaining time".format(posY), estimated_time(posY, ruta_imagen, posX))
                 print("Down")
 
 #-----------------------------------------------------------------------------
@@ -92,6 +94,7 @@ def imprimir_optimizado(ruta_imagen):
                 #End of line
                 cerrar_rele_2()
                 posY = posY +1
+                print("Line {} done, estimated remaining time".format(posY), estimated_time(posY, ruta_imagen, posX))
                 print("Down")
                 
 
@@ -101,29 +104,6 @@ def imprimir_optimizado(ruta_imagen):
 
 
 
-
-def analizar_linea(imagen, Y):
-    '''
-    Returns x,y of first and last black pixel on the line given
-    '''
-    res = []
-    for x in (range(320)):
-        if imagen[x, Y] < 125:
-            res.append(x)
-    if len(res) == 0:
-        return ()
-    return (res[0],res[-1])
-        
-def closest_pixel(posX, pix_izquierdo, pix_derecho):
-  diferencia_1 = abs(posX - pix_izquierdo)
-  diferencia_2 = abs(posX - pix_derecho)
-
-  if diferencia_1 < diferencia_2:
-    return pix_izquierdo
-  elif diferencia_1 > diferencia_2:
-    return pix_derecho
-  else:
-    return pix_izquierdo
 
 
 def ejecutar():
@@ -139,6 +119,7 @@ def ejecutar():
         time.sleep(1)
         imprimir(ruta_imagen)
     if res == "2":
+        print('Estimated time: ', estimated_time(0, ruta_imagen))
         cerrar_rele_3()
         time.sleep(2)
         cerrar_rele_3()
